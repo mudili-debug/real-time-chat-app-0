@@ -12,14 +12,13 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post(
-        'https://real-time-chat-app-0.onrender.com/api/users/register',
-        { 
-          // 🔴 CHANGED HERE (was { username, email, password })
-          name: username,  
-          email, 
-          password 
-        }
-      );
+  'https://real-time-chat-app-0.onrender.com/api/users/register',
+  { 
+    username, // ✅ Correct key
+    email, 
+    password 
+  }
+);
       navigate('/login');
     } catch (err) {
       console.error("Register error:", err.response ? err.response.data : err.message);
