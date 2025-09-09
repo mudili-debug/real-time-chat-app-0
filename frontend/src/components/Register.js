@@ -11,15 +11,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://real-time-chat-app-0.onrender.com/api/users/register', { username, email, password });
+      await axios.post(
+        'https://real-time-chat-app-0.onrender.com/api/users/register',
+        { username, email, password }
+      );
       navigate('/login');
     } catch (err) {
-  console.error("Register error:", err.response ? err.response.data : err.message);
-  alert(
-    err.response?.data?.error || 
-    err.response?.data?.message || 
-    "Something went wrong"
-  );
+      console.error("Register error:", err.response ? err.response.data : err.message);
+      alert(
+        err.response?.data?.error || 
+        err.response?.data?.message || 
+        "Something went wrong"
+      );
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -30,6 +35,7 @@ const Register = () => {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           style={styles.input}
+          required
         />
         <input
           type="email"
@@ -37,6 +43,7 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           style={styles.input}
+          required
         />
         <input
           type="password"
@@ -44,6 +51,7 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           style={styles.input}
+          required
         />
         <button type="submit" style={styles.button}>Register</button>
       </form>
