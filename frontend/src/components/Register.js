@@ -36,7 +36,7 @@ const Register = () => {
   setLoading(true);
   try {
     const res = await axios.post(
-      'https://real-time-chat-app-0.onrender.com/api/users/register',
+      'https://real-time-chat-app-0.onrender.com/api/auth/register',
       { username, email, password } // ✅ Make sure keys match backend
     );
 
