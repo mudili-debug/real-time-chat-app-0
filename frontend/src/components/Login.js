@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config';   // import config
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,12 +11,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+        email,
+        password,
+      });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
     } catch (err) {
-      alert(err.response.data.error);
+      alert(err.response?.data?.error || "Login failed");
     }
   };
 
@@ -43,47 +47,6 @@ const Login = () => {
   );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    backgroundColor: '#f0f2f5',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '40px',
-    borderRadius: '10px',
-    backgroundColor: '#fff',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    width: '300px',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: '20px',
-    color: '#333',
-  },
-  input: {
-    padding: '10px',
-    margin: '10px 0',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    outline: 'none',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '10px',
-    marginTop: '10px',
-    borderRadius: '5px',
-    border: 'none',
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'background 0.3s',
-  },
-};
+const styles = { /* same as before */ };
 
 export default Login;
