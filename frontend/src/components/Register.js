@@ -11,7 +11,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://real-time-chat-app-0.onrender.com', { username, email, password });
+      await axios.post('https://real-time-chat-app-0.onrender.com/api/users/register', { username, email, password });
       navigate('/login');
     } catch (err) {
       alert(err.response.data.error);
