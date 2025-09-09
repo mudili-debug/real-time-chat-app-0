@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import API_BASE_URL from '../config';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +10,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('https://real-time-chat-app-0.onrender.com/api/auth/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
