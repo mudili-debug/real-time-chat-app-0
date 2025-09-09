@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import API_BASE_URL from '../config';
-const socket = io("http://localhost:5000");
+
+const socket = io("https://real-time-chat-app-0.onrender.com/api/chats");
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -26,14 +26,14 @@ const Chat = () => {
     if (!user) window.location.href = "/login";
 
     const fetchChats = async () => {
-      const { data } = await axios.get("http://localhost:5000/api/chats", {
+      const { data } = await axios.get("https://real-time-chat-app-0.onrender.com/api/chats", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setChats(data);
     };
 
     const fetchUsers = async () => {
-      const { data } = await axios.get("http://localhost:5000/api/auth/users", {
+      const { data } = await axios.get("https://real-time-chat-app-0.onrender.com/api/auth/users", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setUsers(data.filter((u) => u._id !== user.id));
@@ -66,7 +66,7 @@ const Chat = () => {
   const selectChat = async (chat) => {
     setSelectedChat(chat);
     socket.emit("joinChat", chat._id);
-    const { data } = await axios.get(`http://localhost:5000/api/messages/${chat._id}`, {
+    const { data } = await axios.get(`https://real-time-chat-app-0.onrender.com/api/messages/${chat._id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     setMessages(data);
@@ -81,7 +81,7 @@ const Chat = () => {
     if (file) formData.append("file", file);
 
     try {
-      await axios.post("http://localhost:5000/api/message", formData, {
+      await axios.post("https://real-time-chat-app-0.onrender.com/api/message", formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
@@ -101,7 +101,7 @@ const Chat = () => {
     }
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/chat",
+        "https://real-time-chat-app-0.onrender.com/api/chat",
         { isGroup: true, name: groupName, users: selectedUsers },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -121,7 +121,7 @@ const Chat = () => {
     if (!selectedPrivateUser) return alert("Select a user");
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/chat",
+        "https://real-time-chat-app-0.onrender.com/api/chat",
         { isGroup: false, users: [selectedPrivateUser] },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -210,7 +210,7 @@ const Chat = () => {
                 >
                   <strong>{msg.sender.username}:</strong> {msg.content}
                   {msg.file && (
-                    <a href={`http://localhost:5000/${msg.file}`} download style={{ color: msg.sender._id === user.id ? "#fff" : "#007bff" }}>
+                    <a href={`https://real-time-chat-app-0.onrender.com/${msg.file}`} download style={{ color: msg.sender._id === user.id ? "#fff" : "#007bff" }}>
                       File
                     </a>
                   )}
