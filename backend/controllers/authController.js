@@ -18,12 +18,17 @@ exports.register = async (req, res) => {
     const user = new User({ username, email, password });
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    // ✅ Send a consistent success response
+    res.status(201).json({
+      message: 'User registered successfully',
+      user: { id: user._id, username: user.username, email: user.email }
+    });
   } catch (err) {
-    console.error('Register error:', err);
+    console.error('Register backend error:', err);
     res.status(500).json({ error: 'Server error. Please try again.' });
   }
 };
+
 
 
 // 🔑 Login user
