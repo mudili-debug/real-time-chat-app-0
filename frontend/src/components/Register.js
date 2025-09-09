@@ -27,26 +27,34 @@ const Register = () => {
     return errs;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const errs = validate();
-    setErrors(errs);
-    if (Object.keys(errs).length > 0) return;
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const errs = validate();
+  setErrors(errs);
+  if (Object.keys(errs).length > 0) return;
 
-    setLoading(true);
-    try {
-      await axios.post(
-        'https://real-time-chat-app-0.onrender.com/api/users/register',
-        { username, email, password } // ✅ Correct keys
-      );
-      navigate('/login');
-    } catch (err) {
-      const msg = err.response?.data?.error || "Something went wrong";
-      setErrors({ submit: msg });
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      'https://real-time-chat-app-0.onrender.com/api/users/register',
+      { username, email, password } // ✅ Make sure keys match backend
+    );
+
+    console.log('Backend response:', res.data); // ✅ For debugging
+    alert(res.data.message); // Show success message
+    navigate('/login');      // Redirect to login page
+  } catch (err) {
+    console.log('Backend error response:', err.response);
+    const msg =
+      err.response?.data?.error ||
+      err.response?.data?.message ||
+      err.message;
+    setErrors({ submit: msg }); // Display error under form
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div style={styles.container}>
