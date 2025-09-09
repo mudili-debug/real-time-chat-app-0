@@ -26,16 +26,22 @@ const Chat = () => {
     if (!user) window.location.href = "/login";
 
     const fetchChats = async () => {
-      const { data } = await axios.get("https://real-time-chat-app-0.onrender.com/api/chats", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const { data } = await axios.get(
+        "https://real-time-chat-app-0.onrender.com/api/chats",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setChats(data);
     };
 
     const fetchUsers = async () => {
-      const { data } = await axios.get("https://real-time-chat-app-0.onrender.com/api/auth/users", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const { data } = await axios.get(
+        "https://real-time-chat-app-0.onrender.com/api/auth/users",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setUsers(data.filter((u) => u._id !== user.id));
     };
 
@@ -45,7 +51,8 @@ const Chat = () => {
     socket.emit("join", { userId: user.id });
 
     socket.on("message", (msg) => {
-      if (msg.chat === selectedChat?._id) setMessages((prev) => [...prev, msg]);
+      if (msg.chat === selectedChat?._id)
+        setMessages((prev) => [...prev, msg]);
     });
 
     socket.on("onlineStatus", ({ userId, online }) => {
@@ -66,9 +73,12 @@ const Chat = () => {
   const selectChat = async (chat) => {
     setSelectedChat(chat);
     socket.emit("joinChat", chat._id);
-    const { data } = await axios.get(`https://real-time-chat-app-0.onrender.com/api/messages/${chat._id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
+    const { data } = await axios.get(
+      `https://real-time-chat-app-0.onrender.com/api/messages/${chat._id}`,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      }
+    );
     setMessages(data);
   };
 
@@ -81,12 +91,16 @@ const Chat = () => {
     if (file) formData.append("file", file);
 
     try {
-      await axios.post("https://real-time-chat-app-0.onrender.com/api/message", formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.post(
+        "https://real-time-chat-app-0.onrender.com/api/message",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       setMessage("");
       setFile(null);
     } catch (err) {
@@ -126,7 +140,8 @@ const Chat = () => {
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       // Add chat if not already exists
-      if (!chats.find((c) => c._id === data._id)) setChats((prev) => [...prev, data]);
+      if (!chats.find((c) => c._id === data._id))
+        setChats((prev) => [...prev, data]);
       setSelectedChat(data);
       setShowPrivateModal(false);
       setSelectedPrivateUser(null);
@@ -137,36 +152,80 @@ const Chat = () => {
   };
 
   // Filtered users for group modal
-  const filteredGroupUsers = users.filter(u =>
-    u.username.toLowerCase().includes(groupSearchQuery.toLowerCase()) ||
-    u.email.toLowerCase().includes(groupSearchQuery.toLowerCase())
+  const filteredGroupUsers = users.filter(
+    (u) =>
+      u.username.toLowerCase().includes(groupSearchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(groupSearchQuery.toLowerCase())
   );
 
   // Filtered users for private modal
-  const filteredPrivateUsers = users.filter(u =>
-    u.username.toLowerCase().includes(privateSearchQuery.toLowerCase()) ||
-    u.email.toLowerCase().includes(privateSearchQuery.toLowerCase())
+  const filteredPrivateUsers = users.filter(
+    (u) =>
+      u.username.toLowerCase().includes(privateSearchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(privateSearchQuery.toLowerCase())
   );
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif", backgroundColor: "#f0f0f0" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        fontFamily: "Arial, sans-serif",
+        backgroundColor: "#f0f0f0",
+      }}
+    >
       {/* Sidebar */}
-      <div style={{ width: "30%", borderRight: "1px solid #ccc", padding: "10px", backgroundColor: "#fff", overflowY: "auto" }}>
+      <div
+        style={{
+          width: "30%",
+          borderRight: "1px solid #ccc",
+          padding: "10px",
+          backgroundColor: "#fff",
+          overflowY: "auto",
+        }}
+      >
         <button
           onClick={() => setShowGroupModal(true)}
-          style={{ width: "100%", padding: "10px", marginBottom: "10px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
         >
           Create Group
         </button>
         <button
           onClick={() => setShowPrivateModal(true)}
-          style={{ width: "100%", padding: "10px", marginBottom: "10px", backgroundColor: "#28a745", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#28a745",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
         >
           New Chat
         </button>
         <button
           onClick={logout}
-          style={{ width: "100%", padding: "10px", marginBottom: "10px", backgroundColor: "#dc3545", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}
+          style={{
+            width: "100%",
+            padding: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#dc3545",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
         >
           Logout
         </button>
@@ -180,28 +239,51 @@ const Chat = () => {
                 padding: "10px",
                 borderBottom: "1px solid #eee",
                 cursor: "pointer",
-                backgroundColor: selectedChat?._id === chat._id ? "#e9ecef" : "transparent",
+                backgroundColor:
+                  selectedChat?._id === chat._id ? "#e9ecef" : "transparent",
               }}
             >
-              {chat.isGroup ? chat.name : chat.users.find((u) => u._id !== user.id)?.username}
-              {chat.users.map((u) => (onlineUsers[u._id] ? " (Online)" : " (Offline)"))}
+              {chat.isGroup
+                ? chat.name
+                : chat.users.find((u) => u._id !== user.id)?.username}
+              {chat.users.map((u) =>
+                onlineUsers[u._id] ? " (Online)" : " (Offline)"
+              )}
             </li>
           ))}
         </ul>
       </div>
 
       {/* Chat Area */}
-      <div style={{ width: "70%", padding: "10px", backgroundColor: "#fff", overflowY: "auto", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <div
+        style={{
+          width: "70%",
+          padding: "10px",
+          backgroundColor: "#fff",
+          overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         {selectedChat && (
           <>
-            <div style={{ height: "70vh", overflowY: "auto", borderBottom: "1px solid #ccc", padding: "10px" }}>
+            <div
+              style={{
+                height: "70vh",
+                overflowY: "auto",
+                borderBottom: "1px solid #ccc",
+                padding: "10px",
+              }}
+            >
               {messages.map((msg) => (
                 <div
                   key={msg._id}
                   style={{
                     margin: "10px 0",
                     padding: "8px",
-                    backgroundColor: msg.sender._id === user.id ? "#007bff" : "#e9ecef",
+                    backgroundColor:
+                      msg.sender._id === user.id ? "#007bff" : "#e9ecef",
                     color: msg.sender._id === user.id ? "#fff" : "#000",
                     borderRadius: "5px",
                     maxWidth: "60%",
@@ -210,22 +292,54 @@ const Chat = () => {
                 >
                   <strong>{msg.sender.username}:</strong> {msg.content}
                   {msg.file && (
-                    <a href={`http://localhost:5000/${msg.file}`} download style={{ color: msg.sender._id === user.id ? "#fff" : "#007bff" }}>
+                    <a
+                      href={`https://real-time-chat-app-0.onrender.com/${msg.file}`}
+                      download
+                      style={{
+                        color:
+                          msg.sender._id === user.id ? "#fff" : "#007bff",
+                      }}
+                    >
                       File
                     </a>
                   )}
                 </div>
               ))}
             </div>
-            <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
+            <div
+              style={{
+                padding: "10px",
+                display: "flex",
+                gap: "10px",
+              }}
+            >
               <input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type message"
-                style={{ flex: "1", padding: "8px", border: "1px solid #ccc", borderRadius: "5px" }}
+                style={{
+                  flex: "1",
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
               />
-              <input type="file" onChange={(e) => setFile(e.target.files[0])} style={{ padding: "8px" }} />
-              <button onClick={sendMessage} style={{ padding: "8px 15px", backgroundColor: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" }}>
+              <input
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+                style={{ padding: "8px" }}
+              />
+              <button
+                onClick={sendMessage}
+                style={{
+                  padding: "8px 15px",
+                  backgroundColor: "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
                 Send
               </button>
             </div>
@@ -235,27 +349,75 @@ const Chat = () => {
 
       {/* Group Modal */}
       {showGroupModal && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <div style={{ backgroundColor: "#fff", padding: "20px", borderRadius: "8px", width: "400px" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              width: "400px",
+            }}
+          >
             <h2>Create Group</h2>
             <input
               type="text"
               placeholder="Group Name"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
-              style={{ width: "100%", padding: "8px", marginBottom: "10px", backgroundColor: "#f0f0f0", border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
             />
             <input
               type="text"
               placeholder="Search users..."
               value={groupSearchQuery}
               onChange={(e) => setGroupSearchQuery(e.target.value)}
-              style={{ width: "100%", padding: "8px", marginBottom: "10px", backgroundColor: "#f0f0f0", border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
             />
-            <div style={{ maxHeight: "200px", overflowY: "auto", border: "1px solid #ccc", padding: "5px", marginBottom: "10px", backgroundColor: "#fafafa" }}>
+            <div
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                padding: "5px",
+                marginBottom: "10px",
+                backgroundColor: "#fafafa",
+              }}
+            >
               {filteredGroupUsers.map((u) => (
                 <div key={u._id}>
-                  <label style={{ display: "block", padding: "5px", borderBottom: "1px solid #eee" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      padding: "5px",
+                      borderBottom: "1px solid #eee",
+                    }}
+                  >
                     <input
                       type="checkbox"
                       value={u._id}
@@ -263,7 +425,9 @@ const Chat = () => {
                       onChange={(e) => {
                         const id = String(e.target.value);
                         if (selectedUsers.includes(id)) {
-                          setSelectedUsers(selectedUsers.filter((uid) => uid !== id));
+                          setSelectedUsers(
+                            selectedUsers.filter((uid) => uid !== id)
+                          );
                         } else {
                           setSelectedUsers([...selectedUsers, id]);
                         }
@@ -274,10 +438,30 @@ const Chat = () => {
                 </div>
               ))}
             </div>
-            <button onClick={createGroup} style={{ backgroundColor: "#007bff", color: "#fff", padding: "8px 15px", border: "none", borderRadius: "5px", cursor: "pointer", marginRight: "10px" }}>
+            <button
+              onClick={createGroup}
+              style={{
+                backgroundColor: "#007bff",
+                color: "#fff",
+                padding: "8px 15px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                marginRight: "10px",
+              }}
+            >
               Create
             </button>
-            <button onClick={() => setShowGroupModal(false)} style={{ padding: "8px 15px", borderRadius: "5px", cursor: "pointer", backgroundColor: "#f0f0f0", border: "1px solid #ddd" }}>
+            <button
+              onClick={() => setShowGroupModal(false)}
+              style={{
+                padding: "8px 15px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+              }}
+            >
               Cancel
             </button>
           </div>
@@ -286,20 +470,61 @@ const Chat = () => {
 
       {/* Private Chat Modal */}
       {showPrivateModal && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <div style={{ backgroundColor: "#fff", padding: "20px", borderRadius: "8px", width: "400px" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              width: "400px",
+            }}
+          >
             <h2>New Chat</h2>
             <input
               type="text"
               placeholder="Search users..."
               value={privateSearchQuery}
               onChange={(e) => setPrivateSearchQuery(e.target.value)}
-              style={{ width: "100%", padding: "8px", marginBottom: "10px", backgroundColor: "#f0f0f0", border: "1px solid #ddd", borderRadius: "4px" }}
+              style={{
+                width: "100%",
+                padding: "8px",
+                marginBottom: "10px",
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
             />
-            <div style={{ maxHeight: "200px", overflowY: "auto", border: "1px solid #ccc", padding: "5px", marginBottom: "10px", backgroundColor: "#fafafa" }}>
+            <div
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+                border: "1px solid #ccc",
+                padding: "5px",
+                marginBottom: "10px",
+                backgroundColor: "#fafafa",
+              }}
+            >
               {filteredPrivateUsers.map((u) => (
                 <div key={u._id}>
-                  <label style={{ display: "block", padding: "5px", borderBottom: "1px solid #eee" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      padding: "5px",
+                      borderBottom: "1px solid #eee",
+                    }}
+                  >
                     <input
                       type="radio"
                       name="privateUser"
@@ -312,10 +537,30 @@ const Chat = () => {
                 </div>
               ))}
             </div>
-            <button onClick={startPrivateChat} style={{ backgroundColor: "#28a745", color: "#fff", padding: "8px 15px", border: "none", borderRadius: "5px", cursor: "pointer", marginRight: "10px" }}>
+            <button
+              onClick={startPrivateChat}
+              style={{
+                backgroundColor: "#28a745",
+                color: "#fff",
+                padding: "8px 15px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                marginRight: "10px",
+              }}
+            >
               Start
             </button>
-            <button onClick={() => setShowPrivateModal(false)} style={{ padding: "8px 15px", borderRadius: "5px", cursor: "pointer", backgroundColor: "#f0f0f0", border: "1px solid #ddd" }}>
+            <button
+              onClick={() => setShowPrivateModal(false)}
+              style={{
+                padding: "8px 15px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+              }}
+            >
               Cancel
             </button>
           </div>
