@@ -14,9 +14,12 @@ const Register = () => {
       await axios.post('https://real-time-chat-app-0.onrender.com/api/users/register', { username, email, password });
       navigate('/login');
     } catch (err) {
-      alert(err.response.data.error);
-    }
-  };
+  console.error("Register error:", err.response ? err.response.data : err.message);
+  alert(
+    err.response?.data?.error || 
+    err.response?.data?.message || 
+    "Something went wrong"
+  );
 
   return (
     <div style={styles.container}>
