@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
-const userRoutes = require('./routes/userRoutes');
+
 const { Server } = require('socket.io');
 const User = require('./models/User');
 const Message = require('./models/Message');
@@ -15,7 +15,7 @@ connectDB();
 
 const app = express();
 app.use(cors());
-app.use("/api/users", userRoutes);
+
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
