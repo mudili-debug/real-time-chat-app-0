@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 
-const socket = io("https://real-time-chat-app-0.onrender.com/api/chats");
+const socket = io("https://real-time-chat-app-0.onrender.com");
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
